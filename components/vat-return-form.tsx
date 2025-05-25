@@ -16,8 +16,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { VATService } from "@/lib/vat-service"
-import { Upload, AlertCircle } from "lucide-react"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Upload } from "lucide-react"
 import { VATTransaction, VATReturn } from "@/lib/types"
 
 const vatReturnSchema = z.object({
@@ -215,16 +214,15 @@ export function VATReturnForm() {
             </div>
 
             {error && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
+              <div className="flex items-center justify-center">
+                <p className="text-red-500">{error}</p>
+              </div>
             )}
 
             {success && (
-              <Alert>
-                <AlertDescription>VAT return created successfully!</AlertDescription>
-              </Alert>
+              <div className="flex items-center justify-center">
+                <p className="text-green-500">VAT return created successfully!</p>
+              </div>
             )}
 
             <Button type="submit" disabled={isSubmitting}>

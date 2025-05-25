@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { TaxAnalysisService } from "@/lib/services/tax-analysis"
-import { VATTransaction } from "@/lib/types"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 
@@ -25,7 +24,7 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions)
     if (!session) {

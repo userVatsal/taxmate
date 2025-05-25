@@ -37,6 +37,7 @@
 - [ ] Add transaction upload
 - [ ] Create deadline calendar view
 - [ ] Add data visualization
+- [ ] Check and fix VAT returns table component for lint, type, and code issues
 
 ### Security & Performance
 - [ ] Implement rate limiting

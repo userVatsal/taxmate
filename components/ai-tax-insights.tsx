@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Info, Lightbulb, AlertTriangle, TrendingUp, Calendar } from "lucide-react"
+import { Info, Lightbulb, AlertTriangle, TrendingUp } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
 import {
   Table,
@@ -78,15 +78,15 @@ export function AITaxInsights() {
     return () => {
       taxService.stopRealTimeTracking()
     }
-  }, [])
+  }, [taxService])
 
   const handleAnalyze = async () => {
     setIsLoading(true)
     try {
       const result = await taxService.analyzeTransactions([]) // TODO: Pass actual transactions
-      setInsights(result.insights)
+      setInsights((result.insights as unknown) as TaxInsight[])
       setDeadlines(result.deadlines)
-      setRecommendations(result.recommendations)
+      setRecommendations((result.recommendations as unknown) as TaxRecommendation[])
 
       toast({
         title: "Analysis Complete",

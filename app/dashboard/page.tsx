@@ -14,7 +14,7 @@ export default function DashboardPage() {
       <div>
         <h2 className="text-2xl font-bold tracking-tight">Welcome back, {user?.name}</h2>
         <p className="text-muted-foreground">
-          Here's an overview of your tax status and upcoming deadlines
+          Here&apos;s an overview of your tax status and upcoming deadlines
         </p>
       </div>
 
