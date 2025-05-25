@@ -1,17 +1,17 @@
 name = "taxmate-api"
-main = "workers/api/tax-analysis.ts"
-compatibility_date = "2024-01-01"
+main = "src/index.ts"
+compatibility_date = "2024-03-25"
 
 [vars]
 DATABASE_URL = ""
-NEXTAUTH_SECRET = "GKp7LDmOpruMRmFcOyu6QdyhYGYR3oiz7fVnI457SFE="
+NEXTAUTH_SECRET = ""
 NEXTAUTH_URL = "https://taxmate.pages.dev"
-JWT_SECRET = "GKp7LDmOpruMRmFcOyu6QdyhYGYR3oiz7fVnI457SFE="
+JWT_SECRET = ""
 
 [[d1_databases]]
 binding = "DB"
 database_name = "taxmate-db"
-database_id = "" # Add your D1 database ID here
+database_id = "7b30c788-3a9a-43f0-8193-81a929bdc721"
 
 [triggers]
 crons = ["0 0 * * *"] # Run daily at midnight 

@@ -88,4 +88,5 @@ jobs:
         projectName: taxmate
         directory: ./out
         gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-        wranglerVersion: '3' 
+        wranglerVersion: '4'
+        wranglerConfigPath: wrangler.toml 

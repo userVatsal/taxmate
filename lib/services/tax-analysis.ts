@@ -1,4 +1,5 @@
 import { VATTransaction } from "@/lib/types"
+import { Transaction, TaxAnalysisResult, TaxDeadline } from '../types'
 
 export interface TaxAnalysisResult {
   insights: TaxInsight[]
@@ -43,22 +44,22 @@ export class TaxAnalysisService {
 
   private constructor() {}
 
-  static getInstance(): TaxAnalysisService {
+  public static getInstance(): TaxAnalysisService {
     if (!TaxAnalysisService.instance) {
       TaxAnalysisService.instance = new TaxAnalysisService()
     }
     return TaxAnalysisService.instance
   }
 
-  async analyzeTransactions(transactions: VATTransaction[]): Promise<TaxAnalysisResult> {
-    try {
-      // TODO: Replace with actual AI service call
-      const result = await this.simulateAIAnalysis(transactions)
-      this.lastAnalysis = result
-      return result
-    } catch (error) {
-      console.error("Failed to analyze transactions:", error)
-      throw new Error("Failed to analyze transactions")
+  public async analyzeTransactions(transactions: Transaction[]): Promise<TaxAnalysisResult> {
+    const insights = this.calculateInsights(transactions)
+    const deadlines = this.calculateDeadlines(transactions)
+    const recommendations = this.generateRecommendations(insights, deadlines)
+
+    return {
+      insights,
+      deadlines,
+      recommendations
     }
   }
 
@@ -93,141 +94,123 @@ export class TaxAnalysisService {
     return this.lastAnalysis
   }
 
-  private async simulateAIAnalysis(transactions: VATTransaction[]): Promise<TaxAnalysisResult> {
-    // Simulate AI analysis with sophisticated rules
-    const insights: TaxInsight[] = []
-    const deadlines: TaxDeadline[] = []
-    const recommendations: TaxRecommendation[] = []
+  private calculateInsights(transactions: Transaction[]) {
+    const totalIncome = transactions
+      .filter(t => t.type === 'income')
+      .reduce((sum, t) => sum + t.amount, 0)
 
-    // Analyze VAT patterns
-    const vatAnalysis = this.analyzeVATPatterns(transactions)
-    insights.push(...vatAnalysis.insights)
-    recommendations.push(...vatAnalysis.recommendations)
+    const totalExpenses = transactions
+      .filter(t => t.type === 'expense')
+      .reduce((sum, t) => sum + t.amount, 0)
 
-    // Analyze payment patterns
-    const paymentAnalysis = this.analyzePaymentPatterns(transactions)
-    insights.push(...paymentAnalysis.insights)
+    const netIncome = totalIncome - totalExpenses
 
-    // Generate deadlines
-    deadlines.push(...this.generateDeadlines(transactions))
+    // Calculate VAT liability
+    const vatLiability = transactions
+      .filter(t => t.vatAmount)
+      .reduce((sum, t) => {
+        if (t.type === 'income') {
+          return sum + (t.vatAmount || 0)
+        } else {
+          return sum - (t.vatAmount || 0)
+        }
+      }, 0)
+
+    // Calculate corporation tax (simplified)
+    const corporationTax = Math.max(0, netIncome * 0.19) // 19% corporation tax rate
+
+    // Calculate income tax (simplified)
+    const taxLiability = Math.max(0, netIncome * 0.20) // 20% basic rate
 
     return {
-      insights,
-      deadlines,
-      recommendations,
+      totalIncome,
+      totalExpenses,
+      netIncome,
+      taxLiability,
+      vatLiability,
+      corporationTax
     }
   }
 
-  private analyzeVATPatterns(transactions: VATTransaction[]) {
-    const insights: TaxInsight[] = []
-    const recommendations: TaxRecommendation[] = []
-
-    // Calculate VAT statistics
-    const vatStats = transactions.reduce(
-      (acc, t) => {
-        if (t.type === "sale") {
-          acc.totalSales += t.amount
-          acc.totalVAT += t.vatAmount
-        } else {
-          acc.totalPurchases += t.amount
-          acc.totalInputVAT += t.vatAmount
-        }
-        return acc
-      },
-      { totalSales: 0, totalPurchases: 0, totalVAT: 0, totalInputVAT: 0 }
-    )
-
-    // Check for VAT optimization opportunities
-    if (vatStats.totalVAT > vatStats.totalInputVAT * 1.5) {
-      insights.push({
-        type: "warning",
-        title: "High VAT Output",
-        description: "Your VAT output is significantly higher than input VAT. Consider reviewing your VAT rates and eligible expenses.",
-        impact: "Potential overpayment of VAT",
-        action: "Review VAT rates and eligible expenses",
-        confidence: 0.85,
-        category: "vat",
-        priority: "high",
-      })
-    }
-
-    // Add VAT recommendations
-    recommendations.push({
-      category: "vat",
-      title: "VAT Rate Optimization",
-      description: "Consider applying reduced VAT rates to eligible products and services",
-      potentialSavings: vatStats.totalVAT * 0.15,
-      implementationComplexity: "medium",
-      timeToImplement: "2-4 weeks",
-      requirements: ["Product categorization review", "VAT rate documentation"],
-    })
-
-    return { insights, recommendations }
-  }
-
-  private analyzePaymentPatterns(transactions: VATTransaction[]) {
-    const insights: TaxInsight[] = []
-
-    // Calculate average payment times
-    const paymentTimes = transactions
-      .filter(t => t.type === "sale")
-      .map(t => {
-        const paymentDate = new Date(t.date)
-        const dueDate = new Date(t.date)
-        dueDate.setDate(dueDate.getDate() + 30) // Assuming 30-day payment terms
-        return paymentDate.getTime() - dueDate.getTime()
-      })
-
-    const avgPaymentTime = paymentTimes.reduce((a, b) => a + b, 0) / paymentTimes.length
-
-    if (avgPaymentTime > 15 * 24 * 60 * 60 * 1000) { // More than 15 days late
-      insights.push({
-        type: "warning",
-        title: "Late Payment Risk",
-        description: "Average payment time is significantly higher than standard terms",
-        impact: "Risk of cash flow issues and late payment penalties",
-        action: "Implement stricter payment terms and automated reminders",
-        confidence: 0.9,
-        category: "general",
-        priority: "high",
-      })
-    }
-
-    return { insights }
-  }
-
-  private generateDeadlines(transactions: VATTransaction[]): TaxDeadline[] {
+  private calculateDeadlines(transactions: Transaction[]): TaxDeadline[] {
     const deadlines: TaxDeadline[] = []
     const now = new Date()
+    const currentYear = now.getFullYear()
+    const currentMonth = now.getMonth()
 
-    // VAT Return deadlines
-    const lastVATDate = new Date(transactions[0]?.date || now)
-    const nextVATDate = new Date(lastVATDate)
-    nextVATDate.setMonth(nextVATDate.getMonth() + 3)
+    // VAT Return deadlines (quarterly)
+    const vatQuarter = Math.floor(currentMonth / 3)
+    const vatDueDate = new Date(currentYear, (vatQuarter + 1) * 3, 7) // 7th day of month after quarter end
 
     deadlines.push({
-      type: "VAT Return",
-      dueDate: nextVATDate.toISOString(),
-      description: `VAT Return for ${nextVATDate.toLocaleDateString("en-GB", { month: "long", year: "numeric" })}`,
-      status: nextVATDate < now ? "overdue" : "upcoming",
-      priority: "high",
-      reminderDays: [30, 14, 7, 3, 1],
+      type: 'VAT Return',
+      dueDate: vatDueDate.toISOString(),
+      description: `VAT Return for Q${vatQuarter + 1} ${currentYear}`,
+      status: vatDueDate < now ? 'overdue' : 'upcoming',
+      priority: 'high',
+      reminderDays: [30, 14, 7, 1]
     })
 
-    // Corporation Tax deadline
-    const yearEnd = new Date(now.getFullYear(), 11, 31)
-    const corporationTaxDate = new Date(yearEnd)
-    corporationTaxDate.setMonth(corporationTaxDate.getMonth() + 9)
+    // Corporation Tax deadline (9 months after year end)
+    const yearEnd = new Date(currentYear, 11, 31)
+    const corporationTaxDueDate = new Date(currentYear + 1, 8, 30) // 9 months after year end
 
     deadlines.push({
-      type: "Corporation Tax",
-      dueDate: corporationTaxDate.toISOString(),
-      description: "Corporation Tax Payment",
-      status: corporationTaxDate < now ? "overdue" : "upcoming",
-      priority: "high",
-      reminderDays: [60, 30, 14, 7, 3, 1],
+      type: 'Corporation Tax',
+      dueDate: corporationTaxDueDate.toISOString(),
+      description: `Corporation Tax for year ending ${yearEnd.toISOString().split('T')[0]}`,
+      status: corporationTaxDueDate < now ? 'overdue' : 'upcoming',
+      priority: 'high',
+      reminderDays: [90, 60, 30, 14, 7]
     })
 
     return deadlines
+  }
+
+  private generateRecommendations(
+    insights: TaxAnalysisResult['insights'],
+    deadlines: TaxDeadline[]
+  ): TaxAnalysisResult['recommendations'] {
+    const recommendations: TaxAnalysisResult['recommendations'] = []
+
+    // Check VAT liability
+    if (insights.vatLiability > 0) {
+      recommendations.push({
+        type: 'VAT',
+        description: `You have a VAT liability of £${insights.vatLiability.toFixed(2)}. Consider setting aside funds for payment.`,
+        priority: 'high'
+      })
+    }
+
+    // Check corporation tax
+    if (insights.corporationTax > 0) {
+      recommendations.push({
+        type: 'Corporation Tax',
+        description: `Estimated corporation tax liability of £${insights.corporationTax.toFixed(2)}. Plan for payment.`,
+        priority: 'high'
+      })
+    }
+
+    // Check upcoming deadlines
+    const upcomingDeadlines = deadlines.filter(d => d.status === 'upcoming')
+    if (upcomingDeadlines.length > 0) {
+      recommendations.push({
+        type: 'Deadlines',
+        description: `You have ${upcomingDeadlines.length} upcoming tax deadlines. Review and prepare documentation.`,
+        priority: 'medium'
+      })
+    }
+
+    // Check profit margin
+    const profitMargin = insights.netIncome / insights.totalIncome
+    if (profitMargin < 0.2) {
+      recommendations.push({
+        type: 'Profitability',
+        description: 'Your profit margin is below 20%. Consider reviewing expenses and pricing strategy.',
+        priority: 'medium'
+      })
+    }
+
+    return recommendations
   }
 } 
