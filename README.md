@@ -1,30 +1,151 @@
-# TaxMate Application
+# TaxMate - AI-Powered Tax Management for UK Businesses
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+TaxMate is an intelligent tax management platform designed specifically for UK businesses. It leverages AI to automate tax calculations, provide real-time insights, and ensure compliance with HMRC regulations.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/vatsal-pareshkumars-projects/v0-tax-mate-application)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/SuiKuDL0hZP)
+## Features
 
-## Overview
+### Core Functionality
+- **VAT Management**
+  - Automated VAT calculations
+  - Real-time VAT return preparation
+  - Deadline tracking and reminders
+  - AI-powered VAT optimization suggestions
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+- **Tax Calculator**
+  - VAT calculator
+  - Corporation tax calculator
+  - Income tax calculator
+  - Tax-saving recommendations
 
-## Deployment
+- **AI-Powered Insights**
+  - Transaction classification
+  - Tax optimization recommendations
+  - Deadline tracking
+  - Real-time analysis
 
-Your project is live at:
+- **Data Management**
+  - CSV import/export
+  - Excel export
+  - PDF report generation
+  - Data validation and cleaning
 
-**[https://vercel.com/vatsal-pareshkumars-projects/v0-tax-mate-application](https://vercel.com/vatsal-pareshkumars-projects/v0-tax-mate-application)**
+### Security & Compliance
+- GDPR compliant
+- Secure authentication
+- Data encryption
+- Regular security audits
 
-## Build your app
+## Tech Stack
 
-Continue building your app on:
+- **Frontend**
+  - Next.js 14
+  - React 18
+  - TypeScript
+  - Tailwind CSS
 
-**[https://v0.dev/chat/projects/SuiKuDL0hZP](https://v0.dev/chat/projects/SuiKuDL0hZP)**
+- **Backend**
+  - Node.js
+  - Prisma ORM
+  - PostgreSQL
+  - NextAuth.js
 
-## How It Works
+- **Testing**
+  - Jest
+  - React Testing Library
+  - TypeScript
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+## Getting Started
+
+### Prerequisites
+- Node.js 18 or higher
+- PostgreSQL 12 or higher
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/userVatsal/taxmate.git
+   cd taxmate
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Set up environment variables:
+   ```bash
+   cp .env.example .env.local
+   ```
+   Edit `.env.local` with your configuration.
+
+4. Set up the database:
+   ```bash
+   npx prisma migrate dev
+   ```
+
+5. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+### Testing
+
+Run the test suite:
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Generate coverage report
+npm run test:coverage
+```
+
+## Project Structure
+
+```
+taxmate/
+├── app/                    # Next.js app directory
+│   ├── api/               # API routes
+│   ├── auth/              # Authentication pages
+│   └── dashboard/         # Dashboard pages
+├── components/            # React components
+├── lib/                   # Utility functions and services
+│   ├── services/         # Business logic services
+│   └── types/            # TypeScript type definitions
+├── prisma/               # Database schema and migrations
+└── __tests__/           # Test files
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Workflow
+
+1. All development should be done in feature branches
+2. Follow the existing code style and conventions
+3. Write tests for new features
+4. Update documentation as needed
+5. Ensure all tests pass before submitting PRs
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+For support, please open an issue in the GitHub repository or contact the maintainers.
+
+## Acknowledgments
+
+- HMRC for tax regulations and guidelines
+- The open-source community for various tools and libraries
+- All contributors who have helped shape TaxMate

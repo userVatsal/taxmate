@@ -1,0 +1,22 @@
+# These owners will be the default owners for everything in the repo.
+# Unless a later match takes precedence, they will be requested for review when someone opens a pull request.
+* @userVatsal
+
+# Frontend specific files
+/app/ @userVatsal
+/components/ @userVatsal
+
+# Backend specific files
+/lib/ @userVatsal
+/prisma/ @userVatsal
+
+# Test files
+/__tests__/ @userVatsal
+
+# Documentation
+/docs/ @userVatsal
+*.md @userVatsal
+
+# Configuration files
+*.config.js @userVatsal
+*.config.ts @userVatsal 
