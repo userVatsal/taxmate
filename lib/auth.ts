@@ -2,7 +2,19 @@ import { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { D1Adapter } from "@auth/d1-adapter"
 
-export const authOptions: NextAuthOptions = {
+// Extend the built-in session types
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string
+      email?: string | null
+      name?: string | null
+      image?: string | null
+    }
+  }
+}
+
+const authOptions: NextAuthOptions = {
   adapter: D1Adapter(process.env.DATABASE_URL as string),
   providers: [
     CredentialsProvider({
