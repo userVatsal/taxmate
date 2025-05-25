@@ -2,6 +2,16 @@ name = "taxmate-api"
 main = "src/index.ts"
 compatibility_date = "2024-03-25"
 
+# Production environment
+[env.production]
+name = "taxmate-api"
+route = "api.taxmate.pages.dev/*"
+
+# Development environment
+[env.development]
+name = "taxmate-api-dev"
+route = "dev-api.taxmate.pages.dev/*"
+
 [vars]
 DATABASE_URL = ""
 NEXTAUTH_SECRET = ""
@@ -14,4 +24,11 @@ database_name = "taxmate-db"
 database_id = "7b30c788-3a9a-43f0-8193-81a929bdc721"
 
 [triggers]
-crons = ["0 0 * * *"] # Run daily at midnight 
+crons = ["0 0 * * *"] # Run daily at midnight
+
+[build]
+command = "pnpm build"
+watch_dir = "src"
+
+[site]
+bucket = "./public" 
