@@ -1,5 +1,27 @@
 # TaxMate Development TODO
 
+## 📋 Project Overview
+TaxMate is an AI-powered tax tool specifically designed for UK businesses to simplify tax management and ensure full compliance with HMRC regulations. The system provides real-time tax insights, automates tax form generation, and offers intelligent suggestions based on business financial data.
+
+### Core Objectives
+- Automate core tax-related tasks for UK businesses
+- Provide real-time recommendations based on current UK regulations
+- Integrate seamlessly with accounting tools
+- Ensure GDPR compliance and data security
+- Support Making Tax Digital (MTD) requirements
+
+### Target Users
+- Small to medium-sized businesses in the UK
+- Businesses requiring VAT, corporation tax, and income tax management
+- Companies seeking automated tax compliance solutions
+
+## 🎨 Design & Branding
+- **Name:** TaxMate
+- **Tagline:** "Simplifying Taxes, Empowering Businesses"
+- **Color Palette:** Shades of blue and green (trust, growth, reliability)
+- **Tone:** Professional but approachable
+- **UI Focus:** Clean, intuitive dashboard with tax calendars and AI insights
+
 ## ✅ Completed Tasks
 
 ### Infrastructure & Setup
@@ -55,8 +77,8 @@
 - [ ] Export functionality
 
 ### Integration
-- [ ] Connect with accounting software
-- [ ] Add bank feed integration
+- [ ] Connect with accounting software (Xero, QuickBooks)
+- [ ] Add bank feed integration (Plaid)
 - [ ] Implement file upload
 - [ ] Add email notifications
 
@@ -65,6 +87,14 @@
 - [ ] Create help documentation
 - [ ] Implement user preferences
 - [ ] Add multi-language support
+
+## 🛠 Technical Stack
+- **Frontend:** Next.js, React, TypeScript
+- **Backend:** Cloudflare Workers, D1 Database
+- **Authentication:** NextAuth.js, JWT
+- **AI/ML:** (Planned) Python with scikit-learn/TensorFlow
+- **Infrastructure:** Cloudflare Pages, Workers
+- **Testing:** Jest, Postman, Selenium
 
 ## 🐛 Known Issues
 1. Need to add proper error handling for database operations
@@ -90,6 +120,13 @@
 2. Add comprehensive testing
 3. Implement security measures
 4. Set up monitoring and logging
-5. Add user documentation 
+5. Add user documentation
+
+## 💰 Budget & Resources
+- Target monthly cost: Under £30 during MVP stage
+- Focus on ROI through subscription pricing
+- Planned integrations: Xero, QuickBooks, Plaid
+- Monitoring: New Relic/Datadog
+
 ---
 Automated update: Last deploy or update ran at 2025-05-25T17:45:17.930Z

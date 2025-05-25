@@ -186,6 +186,12 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.0
         version: 18.3.7(@types/react@18.3.22)
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^8.32.1
+        version: 8.32.1(@typescript-eslint/parser@8.32.1(eslint@8.57.1)(typescript@5.0.2))(eslint@8.57.1)(typescript@5.0.2)
+      '@typescript-eslint/parser':
+        specifier: ^8.32.1
+        version: 8.32.1(eslint@8.57.1)(typescript@5.0.2)
       eslint:
         specifier: ^8.57.0
         version: 8.57.1
