@@ -11,8 +11,10 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "deploy:worker": "wrangler deploy --yes",
-    "dev:worker": "wrangler dev"
+    "deploy:worker": "wrangler deploy --yes && pnpm git:push && pnpm update:todo",
+    "dev:worker": "wrangler dev",
+    "git:push": "git add . && git commit -m 'chore: auto-push after deploy or update' && git push origin main",
+    "update:todo": "node scripts/update-todo.js"
   },
   "dependencies": {
     "@hookform/resolvers": "latest",
