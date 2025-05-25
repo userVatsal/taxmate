@@ -1,50 +1,45 @@
 import { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { prisma } from "@/lib/prisma"
-import { compare } from "bcrypt"
+import { D1Adapter } from "@auth/d1-adapter"
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
-  session: {
-    strategy: "jwt",
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: "/auth/signin",
-    error: "/auth/error",
-  },
+  adapter: D1Adapter(process.env.DATABASE_URL as string),
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (credentials?.email === "test@example.com" && credentials?.password === "password") {
-          return {
-            id: "1",
-            email: credentials.email,
-            name: "Test User",
-          }
+        if (!credentials?.email || !credentials?.password) {
+          return null
         }
-        return null
-      },
-    }),
+
+        // Add your authentication logic here
+        // This is a placeholder - implement your actual auth logic
+        return {
+          id: "1",
+          email: credentials.email,
+          name: "Test User"
+        }
+      }
+    })
   ],
+  session: {
+    strategy: "jwt"
+  },
+  pages: {
+    signIn: "/auth/login",
+  },
   callbacks: {
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string
+        session.user.id = token.sub as string
       }
       return session
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id
-      }
-      return token
-    },
-  },
-} 
+    }
+  }
+}
+
+export default authOptions 
