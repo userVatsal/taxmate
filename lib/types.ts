@@ -28,4 +28,41 @@ export interface VATPayment {
   method: "bank_transfer" | "direct_debit" | "card"
   reference: string
   status: "pending" | "completed" | "failed"
+}
+
+export interface TaxAnalysisResult {
+  insights: {
+    totalIncome: number;
+    totalExpenses: number;
+    netIncome: number;
+    taxLiability: number;
+    vatLiability: number;
+    corporationTax: number;
+  };
+  deadlines: TaxDeadline[];
+  recommendations: {
+    type: string;
+    description: string;
+    priority: 'high' | 'medium' | 'low';
+  }[];
+}
+
+export interface TaxDeadline {
+  type: string;
+  dueDate: string;
+  description: string;
+  status: 'upcoming' | 'overdue' | 'completed';
+  priority: 'high' | 'medium' | 'low';
+  reminderDays: number[];
+}
+
+export interface Transaction {
+  id: string;
+  date: string;
+  description: string;
+  amount: number;
+  type: 'income' | 'expense';
+  category: string;
+  vatRate?: number;
+  vatAmount?: number;
 } 
