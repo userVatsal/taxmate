@@ -1,0 +1,11 @@
+name = "taxmate-api"
+main = "workers/api/tax-analysis.ts"
+compatibility_date = "2024-01-01"
+
+[vars]
+DATABASE_URL = ""
+
+[[d1_databases]]
+binding = "DB"
+database_name = "taxmate-db"
+database_id = "" 

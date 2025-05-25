@@ -11,6 +11,15 @@ const nextConfig = {
   },
   // Add trailing slashes for better Cloudflare Pages compatibility
   trailingSlash: true,
+  // Configure API proxy for Cloudflare Worker
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://taxmate-api.your-worker.workers.dev/:path*',
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig 
