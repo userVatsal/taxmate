@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@9.10.0",
+  "engines": {
+    "node": ">=20.0.0 <21.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -14,7 +17,8 @@
     "deploy:worker": "wrangler deploy && pnpm git:push && pnpm update:todo",
     "dev:worker": "wrangler dev",
     "git:push": "git add . && git commit -m 'chore: auto-push after deploy or update' && git push origin main",
-    "update:todo": "node scripts/update-todo.js"
+    "update:todo": "node scripts/update-todo.js",
+    "postinstall": "next telemetry disable"
   },
   "dependencies": {
     "@auth/d1-adapter": "^1.9.1",
@@ -75,7 +79,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250525.0",
-    "@types/node": "^22.0.0",
+    "@types/node": "^20.0.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@typescript-eslint/eslint-plugin": "^8.32.1",

@@ -1,0 +1,21 @@
+[build]
+command = "pnpm install --prefer-offline && pnpm build"
+upload.format = "modules"
+
+[build.upload]
+format = "modules"
+
+[env.production]
+node_compat = true
+workers_dev = true
+
+[env.development]
+node_compat = true
+workers_dev = true
+
+[site]
+bucket = ".next"
+entry-point = "workers-site"
+
+[build.caching]
+enabled = true 
