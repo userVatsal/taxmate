@@ -35,9 +35,9 @@ app.post('/tax-analysis', async (c) => {
     const taxService = TaxAnalysisService.getInstance()
     const analysis = await taxService.analyzeTransactions(transactions)
 
-    // Store the analysis
+    // Store the analysis using D1
     const storageService = TaxAnalysisStorageService.getInstance()
-    await storageService.saveAnalysis('user-id', analysis) // Replace with actual user ID
+    await storageService.saveAnalysis('user-id', analysis, c.env) // Replace with actual user ID
 
     return c.json(analysis)
   } catch (error) {
@@ -50,7 +50,7 @@ app.post('/tax-analysis', async (c) => {
 app.get('/tax-analysis', async (c) => {
   try {
     const storageService = TaxAnalysisStorageService.getInstance()
-    const lastAnalysis = await storageService.getLatestAnalysis('user-id') // Replace with actual user ID
+    const lastAnalysis = await storageService.getLatestAnalysis('user-id', c.env) // Replace with actual user ID
 
     if (!lastAnalysis) {
       return c.json({ error: 'No analysis available' }, 404)

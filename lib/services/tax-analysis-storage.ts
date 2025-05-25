@@ -1,127 +1,65 @@
-import { prisma } from "@/lib/prisma"
-import { TaxAnalysisResult, TaxDeadline } from "./tax-analysis"
+// Tax analysis storage service for Cloudflare Worker (D1)
+// This version is Worker-compatible and does not use Prisma
+
+import type { TaxAnalysisResult, TaxDeadline } from '../types'
 
 export class TaxAnalysisStorageService {
-  private static instance: TaxAnalysisStorageService
+  static instance: TaxAnalysisStorageService
 
-  private constructor() {}
-
-  static getInstance(): TaxAnalysisStorageService {
+  static getInstance() {
     if (!TaxAnalysisStorageService.instance) {
       TaxAnalysisStorageService.instance = new TaxAnalysisStorageService()
     }
     return TaxAnalysisStorageService.instance
   }
 
-  async saveAnalysis(userId: string, analysis: TaxAnalysisResult): Promise<void> {
-    try {
-      await prisma.taxAnalysis.create({
-        data: {
-          userId,
-          insights: analysis.insights,
-          deadlines: analysis.deadlines,
-          recommendations: analysis.recommendations,
-        },
-      })
-
-      // Save deadlines separately for better querying
-      await Promise.all(
-        analysis.deadlines.map((deadline: TaxDeadline) =>
-          prisma.taxDeadline.create({
-            data: {
-              userId,
-              type: deadline.type,
-              dueDate: new Date(deadline.dueDate),
-              description: deadline.description,
-              status: deadline.status,
-              priority: deadline.priority,
-              reminderDays: deadline.reminderDays,
-            },
-          })
-        )
-      )
-    } catch (error) {
-      console.error("Failed to save tax analysis:", error)
-      throw new Error("Failed to save tax analysis")
+  // Helper to get D1 binding from Worker environment
+  private getD1(env: any) {
+    if (!env || !env.DB) {
+      throw new Error('D1 binding (env.DB) not found. Make sure to bind D1 in wrangler.toml and pass env to methods.')
     }
+    return env.DB
   }
 
-  async getLatestAnalysis(userId: string): Promise<TaxAnalysisResult | null> {
-    try {
-      const analysis = await prisma.taxAnalysis.findFirst({
-        where: { userId },
-        orderBy: { createdAt: "desc" },
-      })
-
-      if (!analysis) {
-        return null
-      }
-
-      return {
-        insights: analysis.insights as any,
-        deadlines: analysis.deadlines as any,
-        recommendations: analysis.recommendations as any,
-      }
-    } catch (error) {
-      console.error("Failed to get latest analysis:", error)
-      throw new Error("Failed to get latest analysis")
-    }
+  // Save analysis result for a user
+  async saveAnalysis(userId: string, analysis: TaxAnalysisResult, env: any) {
+    const db = this.getD1(env)
+    await db.prepare(
+      `INSERT INTO tax_analysis (user_id, result, created_at) VALUES (?, ?, datetime('now'))`
+    ).bind(userId, JSON.stringify(analysis)).run()
   }
 
-  async getUpcomingDeadlines(userId: string): Promise<TaxDeadline[]> {
-    try {
-      const deadlines = await prisma.taxDeadline.findMany({
-        where: {
-          userId,
-          dueDate: {
-            gte: new Date(),
-          },
-          status: "upcoming",
-        },
-        orderBy: {
-          dueDate: "asc",
-        },
-      })
-
-      return deadlines.map((deadline: { 
-        type: string
-        dueDate: Date
-        description: string
-        status: string
-        priority: string
-        reminderDays: number[]
-      }) => ({
-        type: deadline.type,
-        dueDate: deadline.dueDate.toISOString(),
-        description: deadline.description,
-        status: deadline.status as "upcoming" | "overdue" | "completed",
-        priority: deadline.priority as "high" | "medium" | "low",
-        reminderDays: deadline.reminderDays,
-      }))
-    } catch (error) {
-      console.error("Failed to get upcoming deadlines:", error)
-      throw new Error("Failed to get upcoming deadlines")
-    }
+  // Get the latest analysis for a user
+  async getLatestAnalysis(userId: string, env: any): Promise<TaxAnalysisResult | null> {
+    const db = this.getD1(env)
+    const result = await db.prepare(
+      `SELECT result FROM tax_analysis WHERE user_id = ? ORDER BY created_at DESC LIMIT 1`
+    ).bind(userId).first()
+    if (!result) return null
+    return JSON.parse(result.result)
   }
 
-  async updateDeadlineStatus(
-    userId: string,
-    deadlineId: string,
-    status: "upcoming" | "overdue" | "completed"
-  ): Promise<void> {
-    try {
-      await prisma.taxDeadline.update({
-        where: {
-          id: deadlineId,
-          userId,
-        },
-        data: {
-          status,
-        },
-      })
-    } catch (error) {
-      console.error("Failed to update deadline status:", error)
-      throw new Error("Failed to update deadline status")
-    }
+  // Get upcoming deadlines for a user
+  async getUpcomingDeadlines(userId: string, env: any): Promise<TaxDeadline[]> {
+    const db = this.getD1(env)
+    const results = await db.prepare(
+      `SELECT * FROM tax_deadline WHERE user_id = ? AND status = 'upcoming' ORDER BY due_date ASC`
+    ).bind(userId).all()
+    return results.results.map((deadline: any) => ({
+      type: deadline.type,
+      dueDate: deadline.due_date,
+      description: deadline.description,
+      status: deadline.status,
+      priority: deadline.priority,
+      reminderDays: deadline.reminder_days,
+    }))
+  }
+
+  // Update deadline status
+  async updateDeadlineStatus(deadlineId: string, status: string, env: any) {
+    const db = this.getD1(env)
+    await db.prepare(
+      `UPDATE tax_deadline SET status = ? WHERE id = ?`
+    ).bind(status, deadlineId).run()
   }
 } 
