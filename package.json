@@ -11,8 +11,10 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "deploy:worker": "wrangler deploy",
-    "dev:worker": "wrangler dev"
+    "deploy:worker": "wrangler deploy && pnpm git:push && pnpm update:todo",
+    "dev:worker": "wrangler dev",
+    "git:push": "git add . && git commit -m 'chore: auto-push after deploy or update' && git push origin main",
+    "update:todo": "node scripts/update-todo.js"
   },
   "dependencies": {
     "@hookform/resolvers": "latest",
@@ -75,6 +77,8 @@
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.4.0-canary.51",
     "postcss": "^8",
     "tailwindcss": "^3.4.17",
     "typescript": "^5",

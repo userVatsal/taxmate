@@ -39,3 +39,10 @@ next-env.d.ts
 # IDE
 .vscode/
 .idea/
+
+# Cloudflare
+.dev.vars
+.wrangler/
+dist/
+.dev.db
+.cloudflare/
