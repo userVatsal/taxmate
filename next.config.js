@@ -16,7 +16,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://taxmate-api.your-worker.workers.dev/:path*',
+        destination: 'https://taxmate-api.uservatsal.workers.dev/:path*',
       },
     ]
   },

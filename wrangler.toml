@@ -4,6 +4,8 @@ compatibility_date = "2024-01-01"
 
 [vars]
 DATABASE_URL = ""
+NEXTAUTH_SECRET = "GKp7LDmOpruMRmFcOyu6QdyhYGYR3oiz7fVnI457SFE="
+NEXTAUTH_URL = "https://taxmate.pages.dev"
 
 [[d1_databases]]
 binding = "DB"
