@@ -1,72 +1,163 @@
+"use client"
+
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { VATReturnsTable } from "@/components/vat-returns-table"
 import { VATSummaryChart } from "@/components/vat-summary-chart"
+import { VATReturnForm } from "@/components/vat-return-form"
+import { VATPaymentForm } from "@/components/vat-payment-form"
+import { VATAIAssessment } from "@/components/vat-ai-assessment"
+import { VATService } from "@/lib/vat-service"
+import { useEffect } from "react"
+import { VATReturn } from "@/lib/types"
 
 export default function VATPage() {
+  const [activeTab, setActiveTab] = useState("overview")
+  const [vatReturns, setVATReturns] = useState<VATReturn[]>([])
+
+  useEffect(() => {
+    const loadVATReturns = async () => {
+      const vatService = VATService.getInstance()
+      const returns = await vatService.getVATReturns()
+      setVATReturns(returns)
+    }
+
+    loadVATReturns()
+  }, [])
+
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">VAT Returns</h1>
-        <p className="text-muted-foreground">Manage your VAT returns and payments</p>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">VAT Management</h1>
+        <p className="text-muted-foreground">
+          Manage your VAT returns, track payments, and view historical data.
+        </p>
       </div>
-      <div className="flex flex-col gap-6">
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="returns">VAT Returns</TabsTrigger>
+          <TabsTrigger value="payments">Payments</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Current VAT Period</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">Q1 2024</div>
+                <p className="text-xs text-muted-foreground">
+                  Due by 7th May 2024
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">VAT Liability</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">£12,450.00</div>
+                <p className="text-xs text-muted-foreground">
+                  +£1,250.00 from last period
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">VAT Refund</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">£0.00</div>
+                <p className="text-xs text-muted-foreground">
+                  No refund due
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Payment Status</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">Pending</div>
+                <p className="text-xs text-muted-foreground">
+                  23 days until due
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <Card>
+              <CardHeader>
                 <CardTitle>VAT Summary</CardTitle>
-                <CardDescription>Overview of your VAT position</CardDescription>
-              </div>
-              <Button>New VAT Return</Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <VATSummaryChart />
-          </CardContent>
-        </Card>
-        <Tabs defaultValue="returns">
-          <TabsList>
-            <TabsTrigger value="returns">Returns</TabsTrigger>
-            <TabsTrigger value="payments">Payments</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
-          </TabsList>
-          <TabsContent value="returns" className="space-y-6">
+                <CardDescription>
+                  Overview of your VAT position for the current period
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <VATSummaryChart />
+              </CardContent>
+            </Card>
+
+            <VATAIAssessment />
+          </div>
+        </TabsContent>
+
+        <TabsContent value="returns" className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2">
+            <VATReturnForm />
             <Card>
               <CardHeader>
                 <CardTitle>VAT Returns</CardTitle>
-                <CardDescription>Your VAT return history</CardDescription>
+                <CardDescription>
+                  View and manage your VAT returns history
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <VATReturnsTable />
               </CardContent>
             </Card>
-          </TabsContent>
-          <TabsContent value="payments" className="space-y-6">
+          </div>
+        </TabsContent>
+
+        <TabsContent value="payments" className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2">
+            <VATPaymentForm vatReturns={vatReturns} />
             <Card>
               <CardHeader>
-                <CardTitle>VAT Payments</CardTitle>
-                <CardDescription>Your VAT payment history</CardDescription>
+                <CardTitle>Payment History</CardTitle>
+                <CardDescription>
+                  Track your VAT payments and refunds
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <p>VAT payments content will be displayed here.</p>
+                <VATReturnsTable />
               </CardContent>
             </Card>
-          </TabsContent>
-          <TabsContent value="settings" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>VAT Settings</CardTitle>
-                <CardDescription>Configure your VAT settings</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>VAT settings content will be displayed here.</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="settings" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>VAT Settings</CardTitle>
+              <CardDescription>
+                Configure your VAT preferences and settings
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {/* TODO: Implement VAT settings form */}
+              <p>VAT settings form coming soon...</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }
