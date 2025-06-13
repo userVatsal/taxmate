@@ -1,28 +1,34 @@
+import { config } from 'dotenv';
+import { resolve } from 'path';
+import { existsSync } from 'fs';
+
+// Load environment variables from .env.local
+const envPath = resolve(process.cwd(), '.env.local');
+if (!existsSync(envPath)) {
+  console.error('❌ .env.local file not found');
+  process.exit(1);
+}
+
+config({ path: envPath });
+
 const requiredEnvVars = [
   'NEXT_PUBLIC_SUPABASE_URL',
   'NEXT_PUBLIC_SUPABASE_ANON_KEY',
-  'NEXT_PUBLIC_SENTRY_DSN',
   'NEXT_PUBLIC_POSTHOG_KEY',
   'NEXT_PUBLIC_POSTHOG_HOST',
+  'NEXT_PUBLIC_SENTRY_DSN',
 ];
 
-console.log('Checking environment variables...\n');
+const missingEnvVars = requiredEnvVars.filter(
+  (envVar) => !process.env[envVar]
+);
 
-let allPresent = true;
-
-requiredEnvVars.forEach((envVar) => {
-  const value = process.env[envVar];
-  if (!value) {
-    console.error(`❌ ${envVar} is not set`);
-    allPresent = false;
-  } else {
-    console.log(`✅ ${envVar} is set`);
-  }
-});
-
-if (allPresent) {
-  console.log('\nAll environment variables are properly configured! 🎉');
-} else {
-  console.error('\nSome environment variables are missing. Please set them up before continuing.');
+if (missingEnvVars.length > 0) {
+  console.error('❌ Missing required environment variables:');
+  missingEnvVars.forEach((envVar) => {
+    console.error(`   - ${envVar}`);
+  });
   process.exit(1);
-} 
+}
+
+console.log('✅ All required environment variables are set'); 

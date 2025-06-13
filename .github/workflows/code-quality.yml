@@ -1,0 +1,95 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  quality-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: ./frontend
+        run: npm run lint
+
+      - name: Run Prettier Check
+        working-directory: ./frontend
+        run: npm run format:check
+
+      - name: Run TypeScript Check
+        working-directory: ./frontend
+        run: npm run type-check
+
+      - name: Run SonarQube Analysis
+        uses: SonarSource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.projectKey=taxmate-frontend
+            -Dsonar.sources=frontend/src
+            -Dsonar.tests=frontend/tests
+            -Dsonar.javascript.lcov.reportPaths=frontend/coverage/lcov.info
+
+  quality-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install Dependencies
+        working-directory: ./backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install black flake8 mypy pylint
+
+      - name: Run Black
+        working-directory: ./backend
+        run: black --check .
+
+      - name: Run Flake8
+        working-directory: ./backend
+        run: flake8 .
+
+      - name: Run MyPy
+        working-directory: ./backend
+        run: mypy .
+
+      - name: Run Pylint
+        working-directory: ./backend
+        run: pylint **/*.py
+
+      - name: Run SonarQube Analysis
+        uses: SonarSource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.projectKey=taxmate-backend
+            -Dsonar.sources=backend
+            -Dsonar.tests=backend/tests
+            -Dsonar.python.coverage.reportPaths=backend/coverage.xml 

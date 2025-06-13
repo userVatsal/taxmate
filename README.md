@@ -1,98 +1,87 @@
 # TaxMate - AI-Powered UK Tax Assistant
 
-TaxMate is a modern SaaS platform designed to help UK freelancers, creators, and small businesses automate tax management, optimize deductions, and generate self-assessment reports using real-time transaction data.
-
-## Project Structure
-
-```
-taxmate/
-├── frontend/           # Next.js frontend application
-└── backend/           # FastAPI backend application
-```
-
-## Setup Instructions
-
-### Backend Setup
-
-1. Create a Python virtual environment:
-```bash
-cd backend
-python -m venv venv
-source venv/Scripts/activate  # On Windows
-source venv/bin/activate      # On Unix/MacOS
-```
-
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-3. Create a `.env` file in the backend directory with the following variables:
-```
-POSTGRES_SERVER=localhost
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
-POSTGRES_DB=taxmate
-SECRET_KEY=your-secret-key-here-change-in-production
-OPENAI_API_KEY=your-openai-api-key-here
-```
-
-4. Start the backend server:
-```bash
-uvicorn app.main:app --reload
-```
-
-### Frontend Setup
-
-1. Install dependencies:
-```bash
-cd frontend
-npm install
-```
-
-2. Start the development server:
-```bash
-npm run dev
-```
-
-## Development
-
-- Backend API will be available at: http://localhost:8000
-- Frontend application will be available at: http://localhost:3000
-- API documentation will be available at: http://localhost:8000/docs
+TaxMate is a modern SaaS platform designed to revolutionize tax management for UK freelancers, creators, and small businesses.
 
 ## Features
 
-- Transaction management and categorization
-- AI-powered tax deduction suggestions
-- Automated report generation
-- Self-assessment form integration
-- Real-time financial insights
+- Transaction management
+- AI-powered categorization
+- Tax calculations and reporting
+- Real-time analytics
+- Secure data storage
 
 ## Tech Stack
 
-### Frontend
-- Next.js 14 (React)
-- TypeScript
-- Tailwind CSS
-- shadcn/ui components
-- Zustand for state management
+- **Frontend**: Next.js 14, TypeScript, Tailwind CSS
+- **Backend**: Supabase
+- **AI**: OpenAI GPT-4
+- **Analytics**: PostHog
+- **Error Tracking**: Sentry
+- **Deployment**: Vercel
 
-### Backend
-- FastAPI (Python)
-- PostgreSQL
-- SQLAlchemy
-- OpenAI GPT-4
-- JWT Authentication
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- Supabase account
+- PostHog account
+- Sentry account
+- Vercel account
+
+### Environment Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/taxmate.git
+   cd taxmate
+   ```
+
+2. Install dependencies:
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+3. Set up environment variables:
+   ```bash
+   npm run setup-env
+   ```
+
+4. Verify environment setup:
+   ```bash
+   npm run verify-env
+   ```
+
+### Development
+
+1. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+2. Open [http://localhost:3000](http://localhost:3000)
+
+### Deployment
+
+1. Push to GitHub:
+   ```bash
+   git add .
+   git commit -m "Your commit message"
+   git push origin main
+   ```
+
+2. The GitHub Actions workflow will automatically deploy to Vercel
 
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. 

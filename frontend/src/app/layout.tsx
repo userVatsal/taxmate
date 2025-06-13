@@ -1,12 +1,14 @@
 import { Inter } from 'next/font/google'
 import { Navigation } from '@/components/layout/Navigation'
+import { PostHogProvider } from '@/components/providers/PostHogProvider'
+import { SentryProvider } from '@/components/providers/SentryProvider'
 import '../styles/globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata = {
-  title: 'TaxMate - AI-Powered Tax Management',
-  description: 'Streamline your tax management with AI-powered insights and automation.',
+  title: 'TaxMate - AI-Powered UK Tax Assistant',
+  description: 'Automate your tax management with AI',
 }
 
 export default function RootLayout({
@@ -17,8 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans`}>
-        <Navigation />
-        <main>{children}</main>
+        <SentryProvider>
+          <PostHogProvider>
+            <Navigation />
+            <main>{children}</main>
+          </PostHogProvider>
+        </SentryProvider>
       </body>
     </html>
   )

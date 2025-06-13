@@ -1,0 +1,28 @@
+{
+  "entryPoints": ["./src"],
+  "out": "docs/api",
+  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
+  "theme": "default",
+  "name": "TaxMate API Documentation",
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeExternals": true,
+  "includeVersion": true,
+  "hideGenerator": true,
+  "categorizeByGroup": true,
+  "categoryOrder": [
+    "Authentication",
+    "Transactions",
+    "Reports",
+    "Settings",
+    "Utils",
+    "*"
+  ],
+  "readme": "README.md",
+  "plugin": ["typedoc-plugin-markdown"],
+  "markdown": {
+    "entryDocument": "README.md",
+    "hideBreadcrumbs": true,
+    "hideInPageTOC": true
+  }
+} 

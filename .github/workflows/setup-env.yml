@@ -1,0 +1,44 @@
+name: Setup Environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      supabase_url:
+        description: 'Supabase URL'
+        required: true
+      supabase_anon_key:
+        description: 'Supabase Anon Key'
+        required: true
+      posthog_key:
+        description: 'PostHog Key'
+        required: true
+      posthog_host:
+        description: 'PostHog Host'
+        required: true
+      sentry_dsn:
+        description: 'Sentry DSN'
+        required: true
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Create .env.local
+        run: |
+          cat << EOF > frontend/.env.local
+          NEXT_PUBLIC_SUPABASE_URL=${{ github.event.inputs.supabase_url }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ github.event.inputs.supabase_anon_key }}
+          NEXT_PUBLIC_POSTHOG_KEY=${{ github.event.inputs.posthog_key }}
+          NEXT_PUBLIC_POSTHOG_HOST=${{ github.event.inputs.posthog_host }}
+          NEXT_PUBLIC_SENTRY_DSN=${{ github.event.inputs.sentry_dsn }}
+          EOF
+
+      - name: Commit .env.local
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add frontend/.env.local
+          git commit -m "chore: update environment variables"
+          git push 

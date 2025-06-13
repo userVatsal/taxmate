@@ -1,0 +1,57 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'frontend/src/**'
+      - 'frontend/docs/**'
+      - 'frontend/README.md'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'frontend/src/**'
+      - 'frontend/docs/**'
+      - 'frontend/README.md'
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Check documentation links
+        run: |
+          cd frontend
+          npx markdown-link-check README.md
+          npx markdown-link-check docs/**/*.md
+
+      - name: Check documentation spelling
+        run: |
+          cd frontend
+          npx cspell "**/*.{md,ts,tsx}"
+
+      - name: Generate API documentation
+        run: |
+          cd frontend
+          npx typedoc --out docs/api src/**/*.ts
+
+      - name: Deploy documentation
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./frontend/docs
+          publish_branch: gh-pages
+          commit_message: 'docs: update documentation' 
