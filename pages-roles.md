@@ -1,69 +1,153 @@
 # TaxMate Pages & Roles
 
-This document maps every feature to its page, describes each page's function, and lists the main components.
+## Public Pages
 
----
+### Landing Page (/)
+- Marketing content
+- Feature highlights
+- Pricing plans
+- Call-to-action buttons
+- Testimonials
+- FAQ section
 
-## 1. Landing Page
-- **Role:** Marketing, product overview, lead capture
-- **Features:**
-  - Hero section (branding, tagline)
-  - Features overview
-  - Pricing teaser
-  - Call-to-action (signup, free trial)
-  - Trust indicators (compliance, security badges)
-  - Footer (contact, legal, company info)
+### Authentication Pages
+- Login (/auth/login)
+- Register (/auth/register)
+- Forgot Password (/auth/forgot-password)
+- Reset Password (/auth/reset-password)
+- Email Verification (/auth/verify-email)
 
-## 2. Dashboard (future)
-- **Role:** User's main workspace after login
-- **Features:**
-  - Account summary
-  - Quick links to upload transactions, view reports
-  - Recent activity
-  - Alerts/notifications
+## Protected Pages
 
-## 3. Transactions Page (future)
-- **Role:** Upload, view, and manage card transactions
-- **Features:**
-  - CSV/JSON upload
-  - API integration setup
-  - Transaction table (search, filter, categorize)
-  - Recurring transaction detection
+### Dashboard (/dashboard)
+- Overview statistics
+- Recent transactions
+- Quick actions
+- Notifications
+- Tax status summary
 
-## 4. Reports Page (future)
-- **Role:** Generate and view accounting documents
-- **Features:**
-  - Profit & Loss statement
-  - Expense summary
-  - Invoice summary
-  - Download/export options
+### Transactions (/transactions)
+- Transaction list
+- Filtering and sorting
+- Search functionality
+- Bulk actions
+- Export options
+- Upload bank statements
 
-## 5. Tax Analysis Page (future)
-- **Role:** AI-powered tax insights and automation
-- **Features:**
-  - Tax liability estimation
-  - Deduction suggestions
-  - Self Assessment form preparation
-  - VAT summary
+### Reports (/reports)
+- Income summary
+- Expense breakdown
+- Tax liability
+- Profit/loss statement
+- Custom reports
+- Export functionality
 
-## 6. Settings Page (future)
-- **Role:** User preferences, security, integrations
-- **Features:**
-  - Profile management
-  - API keys/integrations
-  - Data export/delete (GDPR)
-  - Security settings
+### Settings (/settings)
+- Profile settings
+- Account settings
+- Notification preferences
+- API keys
+- Connected accounts
+- Billing information
 
----
+## User Roles
 
-## Component Map
-- **Header:** Navigation, branding
-- **Footer:** Legal, contact, company info
-- **Sidebar (dashboard):** Navigation links
-- **Main content:** Varies by page (see above)
+### Free User
+- Basic transaction management
+- Limited reports
+- Basic AI features
+- Email support
+- 1GB storage
 
----
+### Pro User
+- All Free features
+- Advanced transaction management
+- Full reporting suite
+- Advanced AI features
+- Priority support
+- 10GB storage
+- Custom categories
+- Bulk operations
 
-## Notes
-- Currently, only the Landing Page is implemented.
-- All other pages/features are planned for future development as per the masterplan and implementation roadmap. 
+### Enterprise User
+- All Pro features
+- Custom integrations
+- Dedicated support
+- Unlimited storage
+- Team management
+- Advanced security
+- Custom branding
+- API access
+
+## API Endpoints
+
+### Authentication
+- POST /api/auth/register
+- POST /api/auth/login
+- POST /api/auth/logout
+- POST /api/auth/refresh
+- POST /api/auth/verify-email
+- POST /api/auth/reset-password
+
+### Transactions
+- GET /api/transactions
+- POST /api/transactions
+- GET /api/transactions/:id
+- PUT /api/transactions/:id
+- DELETE /api/transactions/:id
+- POST /api/transactions/upload
+- GET /api/transactions/categories
+
+### Reports
+- GET /api/reports/income
+- GET /api/reports/expenses
+- GET /api/reports/tax
+- GET /api/reports/profit-loss
+- POST /api/reports/custom
+- GET /api/reports/export
+
+### Settings
+- GET /api/settings/profile
+- PUT /api/settings/profile
+- GET /api/settings/account
+- PUT /api/settings/account
+- GET /api/settings/notifications
+- PUT /api/settings/notifications
+- GET /api/settings/api-keys
+- POST /api/settings/api-keys
+- DELETE /api/settings/api-keys/:id
+
+## Domain Structure
+
+### Main Domain
+- taxmate.uk
+
+### Subdomains
+- app.taxmate.uk (Main application)
+- api.taxmate.uk (API endpoints)
+- docs.taxmate.uk (Documentation)
+- blog.taxmate.uk (Blog)
+- support.taxmate.uk (Support portal)
+
+## Security & Access Control
+
+### Authentication
+- JWT-based authentication
+- Refresh token rotation
+- Session management
+- Rate limiting
+- IP-based restrictions
+
+### Authorization
+- Role-based access control
+- Resource-level permissions
+- API key management
+- OAuth integration
+- SSO support
+
+### Data Protection
+- End-to-end encryption
+- Secure data storage
+- Data retention policies
+- Audit logging
+- Backup systems 

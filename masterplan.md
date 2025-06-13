@@ -1,136 +1,156 @@
-# TaxMate Backend Masterplan
+# TaxMate - AI-Powered UK Tax Assistant
+## Vision & Purpose
 
-## Overview
+TaxMate is a modern SaaS platform designed to revolutionize tax management for UK freelancers, creators, and small businesses. By leveraging AI and automation, we aim to simplify the complex process of tax management while ensuring compliance with HMRC regulations.
 
-Build a backend module for TaxMate, a business tool for UK companies and sole traders, that:
+### Core Value Proposition
+- **Automation**: Reduce manual data entry and processing time by 90%
+- **Intelligence**: AI-powered insights for tax optimization and compliance
+- **Compliance**: Built-in safeguards for UK tax regulations and GDPR
+- **User Experience**: Intuitive, modern interface with real-time feedback
 
-- Ingests card transaction data (CSV, API, or JSON)
-- Analyzes and categorizes transactions
-- Flags tax-deductible items
-- Generates accounting documents (P&L, expense summaries, invoice summaries)
-- Uses AI to analyze tax liabilities and deduction opportunities (HMRC-compliant)
-- Prepares Self Assessment tax return forms with deductions
-- Handles recurring transactions and VAT
-- Ensures UK GDPR compliance and data security
+## Tech Stack Overview
 
----
+### Frontend
+- **Framework**: Next.js 14 (React) with TypeScript
+- **Styling**: Tailwind CSS + shadcn/ui components
+- **State Management**: Zustand (lightweight, simple)
+- **Data Fetching**: TanStack Query (React Query)
+- **Forms**: React Hook Form + Zod validation
+- **Animations**: Framer Motion
+- **Testing**: Vitest + React Testing Library
+- **Hosting**: Vercel
+- **Domain**: taxmate.uk
 
-## 1. Data Ingestion
+### Backend
+- **Platform**: Supabase
+- **Database**: PostgreSQL
+- **Authentication**: Supabase Auth
+- **File Storage**: Supabase Storage
+- **API**: Supabase Edge Functions
+- **AI Integration**: OpenAI GPT-4 API
+- **Background Jobs**: Supabase Edge Functions
 
-- **Supported formats:** CSV, JSON, direct API (e.g., Open Banking, Plaid, or custom)
-- **Features:**
-  - Upload and parse CSV/JSON files
-  - API endpoint for direct transaction ingestion
-  - Data validation and normalization
+### DevOps
+- **Version Control**: GitHub
+- **CI/CD**: Vercel + GitHub Actions
+- **Monitoring**: Sentry
+- **Analytics**: PostHog
+- **Error Tracking**: Sentry
+- **Performance Monitoring**: Vercel Analytics
 
----
+## Core Features & Implementation Phases
 
-## 2. Transaction Analysis
+### Phase 1: Foundation (Weeks 1-4) ✅
+- [x] Project setup and infrastructure
+- [x] Authentication system
+- [x] Basic dashboard layout
+- [x] Transaction upload system
+- [x] Database schema design
 
-- **Categorization:**
-  - Use rules and AI/ML (e.g., GPT, fine-tuned classifier) to assign categories (travel, office, meals, etc.)
-  - Identify business-related vs. personal expenses
-  - Detect recurring transactions (subscriptions, rent, etc.)
-- **Tax Deductibility:**
-  - Flag items likely to be tax-deductible under HMRC rules
-  - Highlight VAT-eligible transactions
+### Phase 2: Core Functionality (Weeks 5-8)
+- [x] Transaction processing pipeline
+- [x] Basic categorization system
+- [x] Simple reporting
+- [x] User settings and preferences
+- [x] Basic AI integration
 
----
+### Phase 3: Advanced Features (Weeks 9-12)
+- [ ] Advanced transaction analysis
+- [ ] AI-powered tax deduction suggestions
+- [ ] Document generation system
+- [ ] Self-assessment form integration
+- [ ] Export functionality
 
-## 3. Document Generation
+### Phase 4: Deployment & Infrastructure (Weeks 13-14)
+- [ ] Domain setup and configuration
+- [ ] Vercel deployment setup
+- [ ] Supabase project configuration
+- [ ] Monitoring and analytics setup
+- [ ] Security and compliance verification
 
-- **Profit & Loss Statement:**
-  - Summarize income and expenses by category and period
-- **Expense Summary:**
-  - List and total expenses by category
-- **Invoice Summary (optional):**
-  - Aggregate and summarize invoices if available
+### Phase 5: Polish & Launch (Weeks 15-16)
+- [ ] UI/UX refinement
+- [ ] Performance optimization
+- [ ] Security audit
+- [ ] Compliance verification
+- [ ] Beta testing
+- [ ] Production deployment
 
----
+## AI Integration Strategy
 
-## 4. AI-Powered Tax Analysis
+### Transaction Analysis
+- Use GPT-4 for intelligent categorization
+- Implement custom ML models for pattern recognition
+- Real-time anomaly detection
 
-- **Tax Liability Estimation:**
-  - Use AI to estimate tax owed based on categorized transactions and HMRC rules
-- **Deduction Opportunities:**
-  - Suggest additional deductions based on transaction patterns and HMRC guidance
-- **Self Assessment Preparation:**
-  - Auto-fill Self Assessment tax return forms with calculated figures and deductions
+### Tax Optimization
+- AI-powered deduction suggestions
+- Compliance checking
+- Risk assessment
 
----
+### Document Generation
+- Smart template filling
+- Natural language explanations
+- Format validation
 
-## 5. Compliance & Security
+## Security & Compliance
 
-- **UK GDPR:**
-  - Encrypt all personal and financial data at rest and in transit
-  - Allow users to export and delete their data
-  - Log access and processing for auditability
-- **Security:**
-  - Use secure authentication and authorization for all endpoints
-  - Regularly update dependencies and patch vulnerabilities
+### Data Protection
+- End-to-end encryption
+- Secure data storage
+- Regular security audits
+- GDPR compliance
+- Data retention policies
 
----
+### UK Compliance
+- HMRC requirements
+- Data privacy regulations
+- Financial regulations
+- Tax compliance rules
 
-## 6. Recurring Transactions & VAT
+### User Privacy
+- Clear consent management
+- Data portability
+- Right to be forgotten
+- Privacy policy
+- Terms of service
 
-- **Recurring Logic:**
-  - Detect and label recurring payments
-  - Handle partial and full VAT claims where applicable
-- **VAT Handling:**
-  - Identify VAT on expenses and income
-  - Prepare VAT summaries for returns
+## Success Metrics
 
----
+### Technical
+- 99.9% uptime
+- < 2s page load time
+- < 100ms API response time
+- Zero critical security vulnerabilities
+- 100% test coverage for critical paths
 
-## 7. Technology Stack
+### Business
+- 90% user retention
+- 80% automation rate
+- 95% accuracy in tax calculations
+- < 1% error rate in transactions
+- 100% compliance with HMRC requirements
 
-- **Language:** Python 3.10+
-- **Core Libraries:** Pandas, NumPy
-- **AI/ML:** OpenAI GPT (API), or custom fine-tuned classifier (e.g., scikit-learn, HuggingFace)
-- **Web Framework:** FastAPI or Flask (for API endpoints)
-- **Database:** PostgreSQL (preferred), or SQLite for prototyping
-- **Security:** PyJWT, HTTPS, encryption libraries
+## Future Roadmap
 
----
+### Q2 2024
+- Mobile app development
+- Advanced analytics dashboard
+- API marketplace
+- Multi-currency support
+- International tax compliance
 
-## 8. Milestones
+### Q3 2024
+- Enterprise features
+- White-label solutions
+- Advanced integrations
+- Custom reporting
+- Advanced AI features
 
-1. **MVP:**
-   - CSV/JSON ingestion
-   - Basic categorization and expense summary
-   - P&L statement generation
-
-2. **AI Integration:**
-   - Add AI/ML for advanced categorization and deduction suggestions
-
-3. **Tax Return Automation:**
-   - Self Assessment form auto-generation
-   - VAT handling
-
-4. **Compliance & Security:**
-   - Full GDPR compliance
-   - Security hardening
-
-5. **API & UI Integration:**
-   - REST API for frontend
-   - Documentation and user guides
-
----
-
-## 9. Future Enhancements
-
-- Open Banking integration for real-time data
-- Multi-user/team support
-- Custom rules and category management
-- Integration with accounting software (Xero, QuickBooks)
-- Advanced analytics and forecasting
-
----
-
-## 10. References
-
-- [HMRC Self Assessment Guidance](https://www.gov.uk/self-assessment-tax-returns)
-- [HMRC Allowable Expenses](https://www.gov.uk/expenses-if-youre-self-employed)
-- [UK GDPR Overview](https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/)
-
---- 
+### Q4 2024
+- AI-powered tax planning
+- Real-time tax optimization
+- Advanced compliance features
+- Integration with accounting software
+- Custom tax rule engine 

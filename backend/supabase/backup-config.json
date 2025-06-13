@@ -1,0 +1,32 @@
+{
+  "backup": {
+    "schedule": "0 0 * * *",
+    "retention": {
+      "daily": 7,
+      "weekly": 4,
+      "monthly": 3
+    },
+    "storage": {
+      "type": "s3",
+      "bucket": "taxmate-backups",
+      "region": "eu-west-2"
+    },
+    "notifications": {
+      "email": ["admin@taxmate.uk"],
+      "slack": "https://hooks.slack.com/services/your-webhook-url"
+    }
+  },
+  "monitoring": {
+    "performance": {
+      "query_threshold_ms": 1000,
+      "connection_threshold": 100,
+      "storage_threshold_gb": 10
+    },
+    "alerts": {
+      "error_rate_threshold": 0.01,
+      "response_time_threshold_ms": 2000,
+      "cpu_threshold_percent": 80,
+      "memory_threshold_percent": 80
+    }
+  }
+} 
