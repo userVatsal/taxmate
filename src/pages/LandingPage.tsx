@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
-  TrendingUp, 
   Shield, 
   Zap, 
   CheckCircle, 
   ArrowRight, 
-  Star,
   Bot,
   Sparkles,
   Brain,
